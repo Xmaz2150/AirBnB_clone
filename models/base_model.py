@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ base class module """
+from models import storage
 from datetime import datetime
 import uuid
 
@@ -22,6 +23,9 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
 
+            """"""
+            storage.new(self)
+
     def __str__(self):
         """ returns str representation of instance """
 
@@ -33,6 +37,7 @@ class BaseModel:
         """ updtes time when instance gets update """
 
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """ returns dict containing key/val pairs of instance """
