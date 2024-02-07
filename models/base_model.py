@@ -18,6 +18,12 @@ class BaseModel:
                         setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
                     else:
                         setattr(self, key, value)
+        elif args:
+            print("creating from args {} with id : {}".format(args, args[1]))
+            self.id = args[1]
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()

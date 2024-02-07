@@ -11,20 +11,29 @@ class FileStorage():
 
     def all(self):
         """ returns the dictionary __objects """
-        return self.__objects
+
+        return self.get_objs()
 
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id """
+
+        storage_objs = self.get_objs()
+
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        storage_objs[key] = obj
+
+        self.objs_set(storage_objs)
 
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
+        
+        path = self.get_path()
+        storage_objs = self.get_objs()
 
         serialized_objects = {}
-        for key, obj in self.__objects.items():
+        for key, obj in storage_objs.items():
             serialized_objects[key] = obj.to_dict()
-        with open(self.__file_path, 'w') as file:
+        with open(path, 'w') as file:
             json.dump(serialized_objects, file)
 
     def reload(self):
@@ -33,14 +42,33 @@ class FileStorage():
         otherwise, do nothing.
         If the file doesn’t exist, no exception should be raised)
         """
-        
+
+        path = self.get_path()
+        storage_objs = self.get_objs()
+
         try:
-            with open(self.__file_path, 'r') as file:
+            with open(path, 'r') as file:
                 data = json.load(file)
                 for key, value in data.items():
                     class_name, obj_id = key.split('.')
                     obj_cls = globals()[class_name]
                     instance = obj_cls(**value)
-                    self.__objects[key] = instance
+                    storage_objs[key] = instance
+            self.objs_set(storage_objs)
         except FileNotFoundError:
             pass
+
+    @classmethod
+    def get_path(cls):
+        """ storage path getter """
+        return cls.__file_path
+
+    @classmethod
+    def get_objs(cls):
+        """ get storage objs """
+        return cls.__objects
+
+    @classmethod
+    def objs_set(cls, objs):
+        """ instance no setter """
+        cls.__objects = objs
