@@ -19,7 +19,7 @@ class BaseModel:
                     else:
                         setattr(self, key, value)
         elif args:
-            print("creating from args {} with id : {}".format(args, args[1]))
+            #print("creating from args {} with id : {}".format(args, args[1]))
             self.id = args[1]
             self.created_at = datetime.now()
             self.updated_at = datetime.now()

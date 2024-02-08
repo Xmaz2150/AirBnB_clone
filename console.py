@@ -31,11 +31,11 @@ class HBNBCommand(cmd.Cmd):
             else:
                 if len(obj_data) > 1:
                     new_obj = BaseModel(*obj_data)
-                    storage.new(new_obj)
+                    storage.new(new_obj.to_dict())
                     storage.save()
                 else:
                     new_obj = BaseModel()
-                    storage.new(new_obj)
+                    storage.new(new_obj.to_dict())
                     storage.save()
 
     def do_show(self, arg):
@@ -43,6 +43,23 @@ class HBNBCommand(cmd.Cmd):
 
         if not arg:
             print("** class name missing **")
+        else:
+            obj_data = arg.split(' ')
+            class_name = obj_data[0]
+
+            if class_name != "BaseModel":
+                print("** class doesn't exist **")
+            else:
+                if len(obj_data) != 2:
+                    print("** instance id missing **")
+                else:
+                    objs = storage.get_objs()
+                    try:
+                        obj_dict = objs["{}.{}".format(obj_data[0], obj_data[1])]
+                        new_obj = BaseModel(**obj_dict)
+                        print(new_obj.__str__())
+                    except KeyError:
+                        print("** no instance found **")
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id (save the change into the JSON file)"""
