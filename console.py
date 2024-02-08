@@ -3,6 +3,7 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from datetime import datetime
 
 
 class HBNBCommand(cmd.Cmd):
@@ -90,7 +91,39 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)"""
-        return None
+
+        if not arg:
+            print("** class name missing **")
+        else:
+            obj_data = arg.split(' ')
+            class_name = obj_data[0]
+
+            if class_name != "BaseModel":
+                print("** class doesn't exist **")
+            else:
+                if len(obj_data) < 2:
+                    print("** instance id missing **")
+                else:
+                    objs = storage.get_objs()
+                    try:
+                        obj_dict = objs["{}.{}".format(obj_data[0], obj_data[1])]
+                        
+                        if len(obj_data) < 3:
+                            print("** no attr :( **")
+                        elif len(obj_data) < 4:
+                            print("** no attr value :( **")
+                        else:
+                            n_key = obj_data[2]
+                            n_val = obj_data[3]
+                            
+                            obj_dict[n_key] = n_val
+                            new_obj = BaseModel(**obj_dict)
+                            new_obj.updated_at = datetime.now()
+                            storage.new(new_obj.to_dict())
+                            storage.save()
+
+                    except KeyError:
+                        print("** no instance found **")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
