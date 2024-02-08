@@ -19,7 +19,10 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel, saves it (to the JSON file) and prints the id"""
+        """
+        Creates a new instance of BaseModel,
+        saves it (to the JSON file) and prints the id
+        """
 
         if not arg:
             print("** class name missing **")
@@ -40,7 +43,10 @@ class HBNBCommand(cmd.Cmd):
                     storage.save()
 
     def do_show(self, arg):
-        """Prints the string representation of an instance based on the class name and id"""
+        """
+        Prints the string representation of an instance
+        based on the class name and id
+        """
 
         if not arg:
             print("** class name missing **")
@@ -56,26 +62,53 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     objs = storage.get_objs()
                     try:
-                        obj_dict = objs["{}.{}".format(obj_data[0], obj_data[1])]
+                        obj_key = "{}.{}".format(obj_data[0], obj_data[1])
+                        obj_dict = objs[obj_key]
                         new_obj = BaseModel(**obj_dict)
                         print(new_obj.__str__())
                     except KeyError:
                         print("** no instance found **")
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id (save the change into the JSON file)"""
-        return None
+        """
+        Deletes an instance based on the class name and id
+        (saves the change into the JSON file)
+        """
+
+        if not arg:
+            print("** class name missing **")
+        else:
+            obj_data = arg.split(' ')
+            class_name = obj_data[0]
+
+            if class_name != "BaseModel":
+                print("** class doesn't exist **")
+            else:
+                if len(obj_data) != 2:
+                    print("** instance id missing **")
+                else:
+                    objs = storage.get_objs()
+                    try:
+                        obj_key = "{}.{}".format(obj_data[0], obj_data[1])
+                        objs.pop(obj_key)
+                        storage.objs_set(objs)
+                        storage.save()
+                    except KeyError:
+                        print("** no instance found **")
 
     def do_all(self, arg):
-        """Prints all string representation of all instances based or not on the class name"""
+        """ Prints all string representation of all instances
+        based or not on the class name
+        """
 
         objs = storage.get_objs()
         objs_strs = []
+
         def populate_objs_str(objs_strs):
             for key, value in objs.items():
                 obj = BaseModel(**value)
                 objs_strs.append(obj.__str__())
-            
+
             return objs_strs
 
         if not arg:
@@ -90,7 +123,11 @@ class HBNBCommand(cmd.Cmd):
                 print(populate_objs_str(objs_strs))
 
     def do_update(self, arg):
-        """Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)"""
+        """
+        Updates an instance based on the class name and id
+        by adding or updating attribute
+        (saves the change into the JSON file)
+        """
 
         if not arg:
             print("** class name missing **")
@@ -106,8 +143,9 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     objs = storage.get_objs()
                     try:
-                        obj_dict = objs["{}.{}".format(obj_data[0], obj_data[1])]
-                        
+                        obj_key = "{}.{}".format(obj_data[0], obj_data[1])
+                        obj_dict = objs[obj_key]
+
                         if len(obj_data) < 3:
                             print("** no attr :( **")
                         elif len(obj_data) < 4:
@@ -115,7 +153,7 @@ class HBNBCommand(cmd.Cmd):
                         else:
                             n_key = obj_data[2]
                             n_val = obj_data[3]
-                            
+
                             obj_dict[n_key] = n_val
                             new_obj = BaseModel(**obj_dict)
                             new_obj.updated_at = datetime.now()
@@ -124,6 +162,7 @@ class HBNBCommand(cmd.Cmd):
 
                     except KeyError:
                         print("** no instance found **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

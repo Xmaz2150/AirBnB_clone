@@ -10,16 +10,16 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """ initialulizes new instance"""
-        
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != '__class__':
                     if key in ['created_at', 'updated_at']:
-                        setattr(self, key, datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"))
+                        time_fmt = "%Y-%m-%dT%H:%M:%S.%f"
+                        setattr(self, key, datetime.strptime(value, time_fmt))
                     else:
                         setattr(self, key, value)
         elif args:
-            #print("creating from args {} with id : {}".format(args, args[1]))
             self.id = args[1]
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
@@ -35,7 +35,7 @@ class BaseModel:
     def __str__(self):
         """ returns str representation of instance """
 
-        class_name=self.__class__.__name__
+        class_name = self.__class__.__name__
 
         return "[{}] ({}) {}".format(class_name, self.id, self.__dict__)
 

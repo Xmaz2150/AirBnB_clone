@@ -26,7 +26,7 @@ class FileStorage():
 
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
-        
+
         path = self.get_path()
         storage_objs = self.get_objs()
 
@@ -37,7 +37,8 @@ class FileStorage():
             json.dump(serialized_objects, file)
 
     def reload(self):
-        """ deserializes the JSON file to __objects
+        """
+        deserializes the JSON file to __objects
         (only if the JSON file (__file_path) exists
         otherwise, do nothing.
         If the file doesn’t exist, no exception should be raised)
