@@ -67,7 +67,26 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """Prints all string representation of all instances based or not on the class name"""
-        return None
+
+        objs = storage.get_objs()
+        objs_strs = []
+        def populate_objs_str(objs_strs):
+            for key, value in objs.items():
+                obj = BaseModel(**value)
+                objs_strs.append(obj.__str__())
+            
+            return objs_strs
+
+        if not arg:
+            print(populate_objs_str(objs_strs))
+        else:
+            obj_data = arg.split(' ')
+            class_name = obj_data[0]
+
+            if class_name != "BaseModel":
+                print("** class doesn't exist **")
+            else:
+                print(populate_objs_str(objs_strs))
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file)"""
