@@ -47,13 +47,15 @@ class FileStorage():
         path = self.get_path()
         storage_objs = self.get_objs()
 
-        json_strs = {}
+        try:
+            json_strs = {}
 
-        with open(path, 'r', encoding="utf-8") as f:
-            json_strs = json.loads(f.read())
+            with open(path, 'r', encoding="utf-8") as f:
+                json_strs = json.loads(f.read())
 
-        print("JSON* strs from file:\n\n [[{}]]".format(json_strs))
-        self.objs_set(json_strs)
+            self.objs_set(json_strs)
+        except FileNotFoundError:
+            pass
 
         ''''try:
             with open(path, 'r') as file:
