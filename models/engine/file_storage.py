@@ -47,7 +47,15 @@ class FileStorage():
         path = self.get_path()
         storage_objs = self.get_objs()
 
-        try:
+        json_strs = {}
+
+        with open(path, 'r', encoding="utf-8") as f:
+            json_strs = json.loads(f.read())
+
+        print("JSON* strs from file:\n\n [[{}]]".format(json_strs))
+        self.objs_set(json_strs)
+
+        ''''try:
             with open(path, 'r') as file:
                 data = json.load(file)
                 for key, value in data.items():
@@ -57,7 +65,7 @@ class FileStorage():
                     storage_objs[key] = instance
             self.objs_set(storage_objs)
         except FileNotFoundError:
-            pass
+            pass'''
 
     @classmethod
     def get_path(cls):
