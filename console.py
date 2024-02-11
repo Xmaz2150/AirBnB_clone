@@ -38,11 +38,11 @@ class HBNBCommand(cmd.Cmd):
             else:
                 if len(obj_data) > 1:
                     new_obj = BaseModel(*obj_data)
-                    storage.new(new_obj.to_dict())
+                    storage.new(new_obj)
                     storage.save()
                 else:
                     new_obj = BaseModel()
-                    storage.new(new_obj.to_dict())
+                    storage.new(new_obj)
                     storage.save()
 
     def do_show(self, arg):
@@ -160,7 +160,7 @@ class HBNBCommand(cmd.Cmd):
                             obj_dict[n_key] = n_val
                             new_obj = BaseModel(**obj_dict)
                             new_obj.updated_at = datetime.now()
-                            storage.new(new_obj.to_dict())
+                            storage.new(new_obj)
                             storage.save()
 
                     except KeyError:
