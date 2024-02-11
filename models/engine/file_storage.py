@@ -19,8 +19,8 @@ class FileStorage():
 
         storage_objs = self.get_objs()
 
-        key = "{}.{}".format(obj['__class__'], obj['id'])
-        storage_objs[key] = obj
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        storage_objs[key] = obj.to_dict()
 
         self.objs_set(storage_objs)
 
