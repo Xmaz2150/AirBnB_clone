@@ -170,6 +170,7 @@ class HBNBCommand(cmd.Cmd):
                             new_obj.updated_at = datetime.now()
                             storage.new(new_obj)
                             storage.save()
+                            print(new_obj.id)
 
                     except KeyError:
                         print("** no instance found **")
