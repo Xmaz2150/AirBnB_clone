@@ -130,8 +130,9 @@ class HBNBCommand(cmd.Cmd):
                     objs_strs.append(obj.__str__())
             else:
                 for key, value in objs.items():
-                    obj = eval(class_n)(**value)
-                    objs_strs.append(obj.__str__())
+                    if key.split('.')[0] == class_n:
+                        obj = eval(class_n)(**value)
+                        objs_strs.append(obj.__str__())
 
             return objs_strs
 
