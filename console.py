@@ -36,22 +36,22 @@ class HBNBCommand(cmd.Cmd):
             if class_name != "BaseModel":
                 print("** class doesn't exist **")
             else:
-                try:
+                '''try:
                     objs = storage.get_objs()
                     obj_key = "{}.{}".format(obj_data[0], obj_data[1])
                     objs[obj_key]
                     self.do_update(arg)
 
-                except (IndexError, KeyError):
-                    if len(obj_data) > 1:
-                        new_obj = BaseModel(*obj_data)
-                        storage.new(new_obj)
-                        storage.save()
-                    else:
-                        new_obj = BaseModel()
-                        storage.new(new_obj)
-                        storage.save()
-                    print(new_obj.id)
+                except (IndexError, KeyError):'''
+                if len(obj_data) > 1:
+                    new_obj = BaseModel(*obj_data)
+                    storage.new(new_obj)
+                    storage.save()
+                else:
+                    new_obj = BaseModel()
+                    storage.new(new_obj)
+                    storage.save()
+                print(new_obj.id)
 
     def do_show(self, arg):
         """
