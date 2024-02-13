@@ -3,6 +3,7 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 from datetime import datetime
 
 
@@ -33,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != "BaseModel":
+            if class_name not in ["BaseModel", "User"]:
                 print("** class doesn't exist **")
             else:
                 '''try:
@@ -44,11 +45,11 @@ class HBNBCommand(cmd.Cmd):
 
                 except (IndexError, KeyError):'''
                 if len(obj_data) > 1:
-                    new_obj = BaseModel(*obj_data)
+                    new_obj = eval(class_name)(*obj_data)
                     storage.new(new_obj)
                     storage.save()
                 else:
-                    new_obj = BaseModel()
+                    new_obj = eval(class_name)()
                     storage.new(new_obj)
                     storage.save()
                 print(new_obj.id)
@@ -65,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != "BaseModel":
+            if class_name not in ["BaseModel", "User"]:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) != 2:
@@ -75,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
                     try:
                         obj_key = "{}.{}".format(obj_data[0], obj_data[1])
                         obj_dict = objs[obj_key]
-                        new_obj = BaseModel(**obj_dict)
+                        new_obj = eval(class_name)(**obj_dict)
                         print(new_obj.__str__())
                     except KeyError:
                         print("** no instance found **")
@@ -92,7 +93,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != "BaseModel":
+            if class_name not in ["BaseModel", "User"]:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) != 2:
@@ -115,23 +116,28 @@ class HBNBCommand(cmd.Cmd):
         objs = storage.get_objs()
         objs_strs = []
 
-        def populate_objs_str(objs_strs):
-            for key, value in objs.items():
-                obj = BaseModel(**value)
-                objs_strs.append(obj.__str__())
+        def populate_objs_str(objs_strs, class_n=""):
+            if len(class_n) == 0:
+                for key, value in objs.items():
+                    obj = eval(key.split('.')[0])(**value)
+                    objs_strs.append(obj.__str__())
+            else:
+                for key, value in objs.items():
+                    obj = eval(class_n)(**value)
+                    objs_strs.append(obj.__str__())
 
             return objs_strs
 
         if not arg:
-            print(populate_objs_str(objs_strs))
+            print(populate_objs_str(objs_strs, ""))
         else:
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != "BaseModel":
+            if class_name != ["BaseModel", "User"]:
                 print("** class doesn't exist **")
             else:
-                print(populate_objs_str(objs_strs))
+                print(populate_objs_str(objs_strs, class_name))
 
     def do_update(self, arg):
         """
@@ -146,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != "BaseModel":
+            if class_name not in ["BaseModel", "User"]:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) < 2:
@@ -166,7 +172,7 @@ class HBNBCommand(cmd.Cmd):
                             n_val = obj_data[3]
 
                             obj_dict[n_key] = n_val
-                            new_obj = BaseModel(**obj_dict)
+                            new_obj = eval(class_name)(**obj_dict)
                             new_obj.updated_at = datetime.now()
                             storage.new(new_obj)
                             storage.save()
