@@ -158,7 +158,7 @@ class HBNBCommand(cmd.Cmd):
                         obj_dict = objs[obj_key]
 
                         if len(obj_data) < 3:
-                            print("attribute name missing **")
+                            print("** attribute name missing **")
                         elif len(obj_data) < 4:
                             print("** value missing **")
                         else:
