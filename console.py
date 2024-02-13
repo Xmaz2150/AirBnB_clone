@@ -36,15 +36,22 @@ class HBNBCommand(cmd.Cmd):
             if class_name != "BaseModel":
                 print("** class doesn't exist **")
             else:
-                if len(obj_data) > 1:
-                    new_obj = BaseModel(*obj_data)
-                    storage.new(new_obj)
-                    storage.save()
-                else:
-                    new_obj = BaseModel()
-                    storage.new(new_obj)
-                    storage.save()
-                print(new_obj.id)
+                try:
+                    objs = storage.get_objs()
+                    obj_key = "{}.{}".format(obj_data[0], obj_data[1])
+                    objs[obj_key]
+                    self.do_update(arg)
+
+                except (IndexError, KeyError):
+                    if len(obj_data) > 1:
+                        new_obj = BaseModel(*obj_data)
+                        storage.new(new_obj)
+                        storage.save()
+                    else:
+                        new_obj = BaseModel()
+                        storage.new(new_obj)
+                        storage.save()
+                    print(new_obj.id)
 
     def do_show(self, arg):
         """
@@ -151,9 +158,9 @@ class HBNBCommand(cmd.Cmd):
                         obj_dict = objs[obj_key]
 
                         if len(obj_data) < 3:
-                            print("** no attr :( **")
+                            print("attribute name missing **")
                         elif len(obj_data) < 4:
-                            print("** no attr value :( **")
+                            print("** value missing **")
                         else:
                             n_key = obj_data[2]
                             n_val = obj_data[3]
