@@ -30,7 +30,7 @@ class BaseModel:
             self.updated_at = datetime.now()
 
             """"""
-            storage.new(self)
+            '''storage.new(self)'''
 
     def __str__(self):
         """ returns str representation of instance """
@@ -43,6 +43,7 @@ class BaseModel:
         """ updtes time when instance gets update """
 
         self.updated_at = datetime.now()
+        storage.new(self)
         storage.save()
 
     def to_dict(self):
