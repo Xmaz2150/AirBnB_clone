@@ -44,6 +44,7 @@ class HBNBCommand(cmd.Cmd):
                     new_obj = BaseModel()
                     storage.new(new_obj)
                     storage.save()
+                print(new_obj.id)
 
     def do_show(self, arg):
         """
