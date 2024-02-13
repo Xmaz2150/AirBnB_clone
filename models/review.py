@@ -3,13 +3,12 @@
 from models.base_model import BaseModel
 
 
-class User(BaseModel):
+class Review(BaseModel):
     """ user class """
 
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
+    place_id = ""
+    user_id = ""
+    text = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
