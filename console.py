@@ -1,14 +1,20 @@
 #!/usr/bin/python3
 """ heart of HBNB """
 import cmd
+from datetime import datetime
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-from datetime import datetime
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
+    classes = ["BaseModel", "User", "Place", "State", "City", "Amenity", "Review"]
 
     def emptyline(self):
         pass
@@ -29,12 +35,13 @@ class HBNBCommand(cmd.Cmd):
         """
 
         if not arg:
+            print(self.prompt)
             print("** class name missing **")
         else:
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name not in ["BaseModel", "User"]:
+            if class_name not in self.classes:
                 print("** class doesn't exist **")
             else:
                 '''try:
@@ -66,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name not in ["BaseModel", "User"]:
+            if class_name not in self.classes:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) != 2:
@@ -93,7 +100,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name not in ["BaseModel", "User"]:
+            if class_name not in self.classes:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) != 2:
@@ -134,7 +141,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name != ["BaseModel", "User"]:
+            if class_name not in self.classes:
                 print("** class doesn't exist **")
             else:
                 print(populate_objs_str(objs_strs, class_name))
@@ -152,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
             obj_data = arg.split(' ')
             class_name = obj_data[0]
 
-            if class_name not in ["BaseModel", "User"]:
+            if class_name not in self.classes:
                 print("** class doesn't exist **")
             else:
                 if len(obj_data) < 2:
