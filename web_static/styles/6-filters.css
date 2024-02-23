@@ -54,13 +54,15 @@ h4 {
 	border: 1px solid #DDDDDD;
 	border-radius: 4px;
 	position: absolute;
-	margin-top: 0px;
+	top: 100%; /* position popover below it's parent */
+	left: 0; /* align popover with left edge of it's parent */
 	box-sizing: border-box;
-
+	z-index: 1; /* ensure popover is above other content */
 }
 
-div:hover > .popover {
-	display: block;
+.locations:hover > .popover,
+.amenities:hover > .popover {
+	display: block; /* show popover when parent is hovered */
 	cursor: pointer;
 }
 
